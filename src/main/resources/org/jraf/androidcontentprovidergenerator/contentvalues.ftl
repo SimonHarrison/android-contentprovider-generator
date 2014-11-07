@@ -14,9 +14,63 @@ import ${config.providerJavaPackage}.base.AbstractContentValues;
  * Content values wrapper for the {@code ${entity.nameLowerCase}} table.
  */
 public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues {
-    @Override
-    public Uri uri() {
-        return ${entity.nameCamelCase}Columns.CONTENT_URI;
+
+    /**
+    * Parcelable CREATOR
+    */
+    public static final Parcelable.Creator<SegmentContentValues> CREATOR 
+        = new Parcelable.Creator<SegmentContentValues>() {
+
+        public SegmentContentValues createFromParcel(Parcel in) {
+            return new SegmentContentValues(in);
+        }
+		
+        public SegmentContentValues[] newArray(int size) {
+            return new SegmentContentValues[size];
+        }
+	};
+	
+    /**
+    * Construct a new empty ${entity.nameCamelCase}ContentValues
+    */
+	public ${entity.nameCamelCase}ContentValues()
+	{
+		super(SegmentColumns.CONTENT_URI);
+	}
+	
+    /**
+    * Parcelable constructor
+    */	private ${entity.nameCamelCase}ContentValues(Parcel in) {
+		super(in);
+	}
+	
+	/**
+     * Load the values into the ${entity.nameCamelCase}ContentValues from the current position of a cursor 
+     *
+     * @param cursor The cursor to use.  The cursor must be ready in the position to use.
+     */
+    public void loadFromCursor(${entity.nameCamelCase}Cursor cursor) {
+    <#list entity.fields as field>
+    <#if !field.isId>
+        put${field.nameCamelCase}(cursor.get${field.nameCamelCase}());
+    </#if>
+    </#list>
+    }
+    
+    /**
+     * Load the values into the ${entity.nameCamelCase}ContentValues from the first ${entity.nameLowerCase} returned 
+     * by the contentResolver for the specified uri
+     *
+     * @param contentResolver The content resolver to use.
+     * @param uri The uri to use.
+     */
+    public void load(ContentResolver contentResolver, Uri uri) {
+    	Cursor cursor = contentResolver.query(uri, null, null, null, null);
+    	if (cursor.moveToFirst())
+    	{
+    		loadFromCursor(new SegmentCursor(cursor));
+    	}
+        mUri = uri;
     }
 
     /**
@@ -25,9 +79,38 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
      * @param contentResolver The content resolver to use.
      * @param where The selection to use (can be {@code null}).
      */
-    public int update(ContentResolver contentResolver, ${entity.nameCamelCase}Selection where) {
+    public int update(ContentResolver contentResolver, SegmentSelection where) {
         return contentResolver.update(uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
     }
+    
+    /**
+     * Insert a new ${entity.nameLowerCase} using the values stored by this object
+     *
+     * @param contentResolver The content resolver to use.
+     */
+    public Uri insert(ContentResolver contentResolver) {
+        mUri = contentResolver.insert(SegmentColumns.CONTENT_URI, values());
+        return mUri;
+    }
+    
+    /**
+     * Save the values in this ${entity.nameCamelCase}ContentValues as a new ${entity.nameLowerCase}
+     * If this ${entity.nameCamelCase}ContentValues refers to an existing ${entity.nameLowerCase} then saving
+     * is simply an update, otherwise it is an insert.
+     *
+     * @param contentResolver The content resolver to use.
+     */
+    public void save(ContentResolver contentResolver) {
+    	if (uri() == SegmentColumns.CONTENT_URI)
+    	{
+    		insert(contentResolver);
+    	}
+    	else
+    	{
+    		update(contentResolver, null);
+    	}
+    }
+    
     <#list entity.fields as field>
         <#if !field.isId>
 
@@ -64,6 +147,40 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
 
             <#break>
             </#switch>
-        </#if>
+        </#if>   
+    
+    public ${field.javaTypeSimpleName} get${field.nameCamelCase}() {
+            <#switch field.type.name()>
+            <#case "DATE">
+        return new Date(mContentValues.getAsLong(${entity.nameCamelCase}Columns.${field.nameUpperCase}));
+            <#break>
+            <#case "ENUM">
+        return ${field.javaTypeSimpleName}.values()[mContentValues.getAsInteger(${entity.nameCamelCase}Columns.${field.nameUpperCase})];
+            <#break>
+            <#case "INTEGER">
+        return mContentValues.getAsInteger(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
+            <#break>
+            <#case "LONG">
+        return mContentValues.getAsLong(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
+            <#break>
+            <#case "FLOAT">
+        return mContentValues.getAsFloat(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
+            <#break>
+            <#case "DOUBLE">
+        return mContentValues.getAsDouble(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
+            <#break>
+            <#case "BOOLEAN">
+        return mContentValues.getAsBoolean(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
+            <#break>
+            <#case "BYTE_ARRAY">
+        return mContentValues.getAsByteArray(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
+            <#break>
+            <#case "STRING">
+        return mContentValues.getAsString(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
+            <#break>
+            <#default>
+        return mContentValues.get(${entity.nameCamelCase}Columns.${field.nameUpperCase});
+            </#switch>
+    }
     </#list>
 }

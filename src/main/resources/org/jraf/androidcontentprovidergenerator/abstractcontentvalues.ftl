@@ -7,27 +7,49 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 
-public abstract class AbstractContentValues {
-    protected ContentValues mContentValues = new ContentValues();
+public abstract class AbstractContentValues implements Parcelable
+{
+    protected ContentValues mContentValues;
+    protected Uri mUri;
+    
+    /**
+    * Contruct a AbstractContentValues with the specified uri
+    *
+    * @param uri - the uri to use
+    */
+    public AbstractContentValues(Uri uri)
+    {
+    	mContentValues = new ContentValues();
+    	mUri = uri;
+    }
+    
+    /**
+    * Parcelable.writeToParcel
+    */    
+    public void writeToParcel(Parcel out, int flags) 
+    {
+    	mContentValues.writeToParcel(out, flags);
+    	mUri.writeToParcel(out, flags);
+    }
+    
+    /**
+    * Parcelable constructor
+    */ 
+    protected AbstractContentValues(Parcel in) 
+    {
+    	mContentValues = ContentValues.CREATOR.createFromParcel(in);
+    	mUri = Uri.CREATOR.createFromParcel(in);
+    }
+    
+    /**
+    * Parcelable.describeContents
+    */ 
+    public int describeContents() {
+        return 0;
+    }
 
     /**
      * Returns the {@code uri} argument to pass to the {@code ContentResolver} methods.
      */
-    public abstract Uri uri();
-
-    /**
-     * Returns the {@code ContentValues} wrapped by this object.
-     */
-    public ContentValues values() {
-        return mContentValues;
-    }
-
-    /**
-     * Inserts a row into a table using the values stored by this object.
-     * 
-     * @param contentResolver The content resolver to use.
-     */
-    public Uri insert(ContentResolver contentResolver) {
-        return contentResolver.insert(uri(), values());
-    }
+    public Uri uri() { return mUri; }
 }
