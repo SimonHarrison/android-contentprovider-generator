@@ -3,11 +3,12 @@ ${header}
 </#if>
 package ${config.providerJavaPackage}.${entity.packageName};
 
-import java.util.Date;
-
 import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.database.Cursor;
 import android.net.Uri;
-
+import android.os.Parcel;
+import android.os.Parcelable;
 import ${config.providerJavaPackage}.base.AbstractContentValues;
 
 /**
@@ -18,15 +19,15 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
     /**
     * Parcelable CREATOR
     */
-    public static final Parcelable.Creator<SegmentContentValues> CREATOR 
-        = new Parcelable.Creator<SegmentContentValues>() {
+    public static final Parcelable.Creator<${entity.nameCamelCase}ContentValues> CREATOR 
+        = new Parcelable.Creator<${entity.nameCamelCase}ContentValues>() {
 
-        public SegmentContentValues createFromParcel(Parcel in) {
-            return new SegmentContentValues(in);
+        public ${entity.nameCamelCase}ContentValues createFromParcel(Parcel in) {
+            return new ${entity.nameCamelCase}ContentValues(in);
         }
 		
-        public SegmentContentValues[] newArray(int size) {
-            return new SegmentContentValues[size];
+        public ${entity.nameCamelCase}ContentValues[] newArray(int size) {
+            return new ${entity.nameCamelCase}ContentValues[size];
         }
 	};
 	
@@ -35,7 +36,7 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
     */
 	public ${entity.nameCamelCase}ContentValues()
 	{
-		super(SegmentColumns.CONTENT_URI);
+		super(${entity.nameCamelCase}Columns.CONTENT_URI);
 	}
 	
     /**
@@ -44,7 +45,7 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
 		super(in);
 	}
 	
-	/**
+     /**
      * Load the values into the ${entity.nameCamelCase}ContentValues from the current position of a cursor 
      *
      * @param cursor The cursor to use.  The cursor must be ready in the position to use.
@@ -55,6 +56,7 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
         put${field.nameCamelCase}(cursor.get${field.nameCamelCase}());
     </#if>
     </#list>
+        mUri = ContentUris.withAppendedId(${entity.nameCamelCase}Columns.CONTENT_URI, cursor.getId());
     }
     
     /**
@@ -68,9 +70,8 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
     	Cursor cursor = contentResolver.query(uri, null, null, null, null);
     	if (cursor.moveToFirst())
     	{
-    		loadFromCursor(new SegmentCursor(cursor));
+    		loadFromCursor(new ${entity.nameCamelCase}Cursor(cursor));
     	}
-        mUri = uri;
     }
 
     /**
@@ -79,7 +80,7 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
      * @param contentResolver The content resolver to use.
      * @param where The selection to use (can be {@code null}).
      */
-    public int update(ContentResolver contentResolver, SegmentSelection where) {
+    public int update(ContentResolver contentResolver, ${entity.nameCamelCase}Selection where) {
         return contentResolver.update(uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
     }
     
@@ -89,7 +90,7 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
      * @param contentResolver The content resolver to use.
      */
     public Uri insert(ContentResolver contentResolver) {
-        mUri = contentResolver.insert(SegmentColumns.CONTENT_URI, values());
+        mUri = contentResolver.insert(${entity.nameCamelCase}Columns.CONTENT_URI, values());
         return mUri;
     }
     
@@ -101,7 +102,7 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
      * @param contentResolver The content resolver to use.
      */
     public void save(ContentResolver contentResolver) {
-    	if (uri() == SegmentColumns.CONTENT_URI)
+    	if (uri() == ${entity.nameCamelCase}Columns.CONTENT_URI)
     	{
     		insert(contentResolver);
     	}
@@ -109,6 +110,10 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
     	{
     		update(contentResolver, null);
     	}
+    }
+
+    public long getId() {
+        return ContentUris.parseId(mUri);
     }
     
     <#list entity.fields as field>
@@ -144,10 +149,8 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
         mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
-
             <#break>
-            </#switch>
-        </#if>   
+            </#switch>   
     
     public ${field.javaTypeSimpleName} get${field.nameCamelCase}() {
             <#switch field.type.name()>
@@ -182,5 +185,6 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
         return mContentValues.get(${entity.nameCamelCase}Columns.${field.nameUpperCase});
             </#switch>
     }
+        </#if>
     </#list>
 }

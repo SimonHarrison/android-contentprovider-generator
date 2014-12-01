@@ -3,9 +3,10 @@ ${header}
 </#if>
 package ${config.providerJavaPackage}.base;
 
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 public abstract class AbstractContentValues implements Parcelable
 {
@@ -52,4 +53,9 @@ public abstract class AbstractContentValues implements Parcelable
      * Returns the {@code uri} argument to pass to the {@code ContentResolver} methods.
      */
     public Uri uri() { return mUri; }
+    
+    /**
+     * Returns the {@code ContentValues} argument to pass to the {@code ContentResolver} methods.
+     */
+    public ContentValues values() { return mContentValues; }
 }
