@@ -24,47 +24,66 @@
  */
 package org.jraf.androidcontentprovidergenerator.sample.provider.team;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import android.net.Uri;
 import android.provider.BaseColumns;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.SampleProvider;
+import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.SerialNumberColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
 
 /**
- * Columns for the {@code team} table.
+ * A group of people who work together.
  */
 public class TeamColumns implements BaseColumns {
     public static final String TABLE_NAME = "team";
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
-    public static final String _ID = BaseColumns._ID;
+    /**
+     * Primary key.
+     */
+    public static final String _ID = new String(BaseColumns._ID);
+
     public static final String COMPANY_ID = "company_id";
-    public static final String TEAM_NAME = "team_name";
+
+    public static final String NAME = "team__name";
+
+    /**
+     * 2 letter country code where this team operates.
+     */
+    public static final String COUNTRY_CODE = "team__country_code";
+
+    /**
+     * The serial number of this team.
+     */
+    public static final String SERIAL_NUMBER_ID = "team__serial_number_id";
+
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
 
     // @formatter:off
-    public static final String[] FULL_PROJECTION = new String[] {
-            TABLE_NAME + "." + _ID + " AS " + BaseColumns._ID,
-            TABLE_NAME + "." + COMPANY_ID,
-            TABLE_NAME + "." + TEAM_NAME
+    public static final String[] ALL_COLUMNS = new String[] {
+            _ID,
+            COMPANY_ID,
+            NAME,
+            COUNTRY_CODE,
+            SERIAL_NUMBER_ID
     };
     // @formatter:on
-
-    private static final Set<String> ALL_COLUMNS = new HashSet<String>();
-    static {
-        ALL_COLUMNS.add(_ID);
-        ALL_COLUMNS.add(COMPANY_ID);
-        ALL_COLUMNS.add(TEAM_NAME);
-    }
 
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {
-            if (ALL_COLUMNS.contains(c)) return true;
+            if (c == COMPANY_ID || c.contains("." + COMPANY_ID)) return true;
+            if (c == NAME || c.contains("." + NAME)) return true;
+            if (c == COUNTRY_CODE || c.contains("." + COUNTRY_CODE)) return true;
+            if (c == SERIAL_NUMBER_ID || c.contains("." + SERIAL_NUMBER_ID)) return true;
         }
         return false;
     }
+
+    public static final String PREFIX_COMPANY = TABLE_NAME + "__" + CompanyColumns.TABLE_NAME;
+    public static final String PREFIX_SERIAL_NUMBER = TABLE_NAME + "__" + SerialNumberColumns.TABLE_NAME;
 }

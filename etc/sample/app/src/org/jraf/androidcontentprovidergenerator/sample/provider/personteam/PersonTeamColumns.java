@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.androidcontentprovidergenerator.sample.provider.company;
+package org.jraf.androidcontentprovidergenerator.sample.provider.personteam;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -35,10 +35,10 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyC
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
 
 /**
- * A commercial business.
+ * Entity joining people and teams.  A team contains several people, and a person can belong to several teams.
  */
-public class CompanyColumns implements BaseColumns {
-    public static final String TABLE_NAME = "company";
+public class PersonTeamColumns implements BaseColumns {
+    public static final String TABLE_NAME = "person_team";
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
     /**
@@ -46,20 +46,9 @@ public class CompanyColumns implements BaseColumns {
      */
     public static final String _ID = new String(BaseColumns._ID);
 
-    /**
-     * The commercial name of this company.
-     */
-    public static final String NAME = "company__name";
+    public static final String PERSON_ID = "person_id";
 
-    /**
-     * The full address of this company.
-     */
-    public static final String ADDRESS = "address";
-
-    /**
-     * The serial number of this company.
-     */
-    public static final String SERIAL_NUMBER_ID = "company__serial_number_id";
+    public static final String TEAM_ID = "team_id";
 
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
@@ -67,21 +56,20 @@ public class CompanyColumns implements BaseColumns {
     // @formatter:off
     public static final String[] ALL_COLUMNS = new String[] {
             _ID,
-            NAME,
-            ADDRESS,
-            SERIAL_NUMBER_ID
+            PERSON_ID,
+            TEAM_ID
     };
     // @formatter:on
 
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {
-            if (c == NAME || c.contains("." + NAME)) return true;
-            if (c == ADDRESS || c.contains("." + ADDRESS)) return true;
-            if (c == SERIAL_NUMBER_ID || c.contains("." + SERIAL_NUMBER_ID)) return true;
+            if (c == PERSON_ID || c.contains("." + PERSON_ID)) return true;
+            if (c == TEAM_ID || c.contains("." + TEAM_ID)) return true;
         }
         return false;
     }
 
-    public static final String PREFIX_SERIAL_NUMBER = TABLE_NAME + "__" + SerialNumberColumns.TABLE_NAME;
+    public static final String PREFIX_PERSON = TABLE_NAME + "__" + PersonColumns.TABLE_NAME;
+    public static final String PREFIX_TEAM = TABLE_NAME + "__" + TeamColumns.TABLE_NAME;
 }

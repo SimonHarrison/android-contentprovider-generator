@@ -29,6 +29,7 @@ import java.util.Date;
 import android.database.Cursor;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCursor;
+import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
 
 /**
  * Cursor wrapper for the {@code company} table.
@@ -39,20 +40,45 @@ public class CompanyCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code company_name} value.
+     * The commercial name of this company.
      * Cannot be {@code null}.
      */
-    public String getCompanyName() {
-        Integer index = getCachedColumnIndexOrThrow(CompanyColumns.COMPANY_NAME);
+    public String getName() {
+        Integer index = getCachedColumnIndexOrThrow(CompanyColumns.NAME);
         return getString(index);
     }
 
     /**
-     * Get the {@code address} value.
+     * The full address of this company.
      * Can be {@code null}.
      */
     public String getAddress() {
         Integer index = getCachedColumnIndexOrThrow(CompanyColumns.ADDRESS);
+        return getString(index);
+    }
+
+    /**
+     * The serial number of this company.
+     */
+    public long getSerialNumberId() {
+        return getLongOrNull(CompanyColumns.SERIAL_NUMBER_ID);
+    }
+
+    /**
+     * Unique id, first part.
+     * Cannot be {@code null}.
+     */
+    public String getSerialNumberPart0() {
+        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.PART0);
+        return getString(index);
+    }
+
+    /**
+     * Unique id, second part.
+     * Cannot be {@code null}.
+     */
+    public String getSerialNumberPart1() {
+        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.PART1);
         return getString(index);
     }
 }

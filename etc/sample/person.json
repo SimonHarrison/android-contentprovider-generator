@@ -1,20 +1,14 @@
 {
+	"documentation": "A human being which is part of a team.",
 	"fields": [
 		{
-			"name": "main_team_id",
-			"type": "Long",
-			"nullable": false,
-			"foreignKey": {
-				"table": "team",
-				"onDelete": "CASCADE",
-			},
-		},
-		{
+			"documentation": "First name of this person. For instance, John.",
 			"name": "first_name",
 			"type": "String",
 			"nullable": false,
 		},
 		{
+			"documentation": "Last name (a.k.a. Given name) of this person. For instance, Smith.",
 			"name": "last_name",
 			"type": "String",
 			"nullable": false,
@@ -31,6 +25,7 @@
 			"nullable": true,
 		},
 		{
+			"documentation": "If {@code true}, this person has blue eyes. Otherwise, this person doesn't have blue eyes.",
 			"name": "has_blue_eyes",
 			"type": "Boolean",
 			"nullable": false,
@@ -50,6 +45,11 @@
 				"FEMALE",
 				{"OTHER": "Value to use when neither male nor female"},
 			],
+			"nullable": false,
+		},
+		{
+			"name": "country_code",
+			"type": "String",
 			"nullable": false,
 		},
 	],

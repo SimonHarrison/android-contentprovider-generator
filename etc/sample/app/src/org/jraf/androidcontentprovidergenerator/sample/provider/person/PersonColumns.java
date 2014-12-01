@@ -24,65 +24,83 @@
  */
 package org.jraf.androidcontentprovidergenerator.sample.provider.person;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import android.net.Uri;
 import android.provider.BaseColumns;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.SampleProvider;
+import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.SerialNumberColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
 
 /**
- * Columns for the {@code person} table.
+ * A human being which is part of a team.
  */
 public class PersonColumns implements BaseColumns {
     public static final String TABLE_NAME = "person";
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
-    public static final String _ID = BaseColumns._ID;
-    public static final String MAIN_TEAM_ID = "main_team_id";
+    /**
+     * Primary key.
+     */
+    public static final String _ID = new String(BaseColumns._ID);
+
+    /**
+     * First name of this person. For instance, John.
+     */
     public static final String FIRST_NAME = "first_name";
+
+    /**
+     * Last name (a.k.a. Given name) of this person. For instance, Smith.
+     */
     public static final String LAST_NAME = "last_name";
+
     public static final String AGE = "age";
+
     public static final String BIRTH_DATE = "birth_date";
+
+    /**
+     * If {@code true}, this person has blue eyes. Otherwise, this person doesn't have blue eyes.
+     */
     public static final String HAS_BLUE_EYES = "has_blue_eyes";
+
     public static final String HEIGHT = "height";
+
     public static final String GENDER = "gender";
+
+    public static final String COUNTRY_CODE = "person__country_code";
+
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
 
     // @formatter:off
-    public static final String[] FULL_PROJECTION = new String[] {
-            TABLE_NAME + "." + _ID + " AS " + BaseColumns._ID,
-            TABLE_NAME + "." + MAIN_TEAM_ID,
-            TABLE_NAME + "." + FIRST_NAME,
-            TABLE_NAME + "." + LAST_NAME,
-            TABLE_NAME + "." + AGE,
-            TABLE_NAME + "." + BIRTH_DATE,
-            TABLE_NAME + "." + HAS_BLUE_EYES,
-            TABLE_NAME + "." + HEIGHT,
-            TABLE_NAME + "." + GENDER
+    public static final String[] ALL_COLUMNS = new String[] {
+            _ID,
+            FIRST_NAME,
+            LAST_NAME,
+            AGE,
+            BIRTH_DATE,
+            HAS_BLUE_EYES,
+            HEIGHT,
+            GENDER,
+            COUNTRY_CODE
     };
     // @formatter:on
-
-    private static final Set<String> ALL_COLUMNS = new HashSet<String>();
-    static {
-        ALL_COLUMNS.add(_ID);
-        ALL_COLUMNS.add(MAIN_TEAM_ID);
-        ALL_COLUMNS.add(FIRST_NAME);
-        ALL_COLUMNS.add(LAST_NAME);
-        ALL_COLUMNS.add(AGE);
-        ALL_COLUMNS.add(BIRTH_DATE);
-        ALL_COLUMNS.add(HAS_BLUE_EYES);
-        ALL_COLUMNS.add(HEIGHT);
-        ALL_COLUMNS.add(GENDER);
-    }
 
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {
-            if (ALL_COLUMNS.contains(c)) return true;
+            if (c == FIRST_NAME || c.contains("." + FIRST_NAME)) return true;
+            if (c == LAST_NAME || c.contains("." + LAST_NAME)) return true;
+            if (c == AGE || c.contains("." + AGE)) return true;
+            if (c == BIRTH_DATE || c.contains("." + BIRTH_DATE)) return true;
+            if (c == HAS_BLUE_EYES || c.contains("." + HAS_BLUE_EYES)) return true;
+            if (c == HEIGHT || c.contains("." + HEIGHT)) return true;
+            if (c == GENDER || c.contains("." + GENDER)) return true;
+            if (c == COUNTRY_CODE || c.contains("." + COUNTRY_CODE)) return true;
         }
         return false;
     }
+
 }

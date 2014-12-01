@@ -31,6 +31,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractSelection;
+import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
 
 /**
  * Selection for the {@code company} table.
@@ -72,23 +73,23 @@ public class CompanySelection extends AbstractSelection<CompanySelection> {
 
 
     public CompanySelection id(long... value) {
-        addEquals(CompanyColumns._ID, toObjectArray(value));
+        addEquals("company." + CompanyColumns._ID, toObjectArray(value));
         return this;
     }
 
 
-    public CompanySelection companyName(String... value) {
-        addEquals(CompanyColumns.COMPANY_NAME, value);
+    public CompanySelection name(String... value) {
+        addEquals(CompanyColumns.NAME, value);
         return this;
     }
 
-    public CompanySelection companyNameNot(String... value) {
-        addNotEquals(CompanyColumns.COMPANY_NAME, value);
+    public CompanySelection nameNot(String... value) {
+        addNotEquals(CompanyColumns.NAME, value);
         return this;
     }
 
-    public CompanySelection companyNameLike(String... value) {
-        addLike(CompanyColumns.COMPANY_NAME, value);
+    public CompanySelection nameLike(String... value) {
+        addLike(CompanyColumns.NAME, value);
         return this;
     }
 
@@ -104,6 +105,66 @@ public class CompanySelection extends AbstractSelection<CompanySelection> {
 
     public CompanySelection addressLike(String... value) {
         addLike(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public CompanySelection serialNumberId(long... value) {
+        addEquals(CompanyColumns.SERIAL_NUMBER_ID, toObjectArray(value));
+        return this;
+    }
+
+    public CompanySelection serialNumberIdNot(long... value) {
+        addNotEquals(CompanyColumns.SERIAL_NUMBER_ID, toObjectArray(value));
+        return this;
+    }
+
+    public CompanySelection serialNumberIdGt(long value) {
+        addGreaterThan(CompanyColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public CompanySelection serialNumberIdGtEq(long value) {
+        addGreaterThanOrEquals(CompanyColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public CompanySelection serialNumberIdLt(long value) {
+        addLessThan(CompanyColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public CompanySelection serialNumberIdLtEq(long value) {
+        addLessThanOrEquals(CompanyColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public CompanySelection serialNumberPart0(String... value) {
+        addEquals(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public CompanySelection serialNumberPart0Not(String... value) {
+        addNotEquals(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public CompanySelection serialNumberPart0Like(String... value) {
+        addLike(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public CompanySelection serialNumberPart1(String... value) {
+        addEquals(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public CompanySelection serialNumberPart1Not(String... value) {
+        addNotEquals(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public CompanySelection serialNumberPart1Like(String... value) {
+        addLike(SerialNumberColumns.PART1, value);
         return this;
     }
 }

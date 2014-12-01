@@ -29,8 +29,6 @@ import java.util.Date;
 import android.database.Cursor;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCursor;
-import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
-import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
 
 /**
  * Cursor wrapper for the {@code person} table.
@@ -41,14 +39,7 @@ public class PersonCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code main_team_id} value.
-     */
-    public long getMainTeamId() {
-        return getLongOrNull(PersonColumns.MAIN_TEAM_ID);
-    }
-
-    /**
-     * Get the {@code first_name} value.
+     * First name of this person. For instance, John.
      * Cannot be {@code null}.
      */
     public String getFirstName() {
@@ -57,7 +48,7 @@ public class PersonCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code last_name} value.
+     * Last name (a.k.a. Given name) of this person. For instance, Smith.
      * Cannot be {@code null}.
      */
     public String getLastName() {
@@ -81,7 +72,7 @@ public class PersonCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code has_blue_eyes} value.
+     * If {@code true}, this person has blue eyes. Otherwise, this person doesn't have blue eyes.
      */
     public boolean getHasBlueEyes() {
         return getBoolean(PersonColumns.HAS_BLUE_EYES);
@@ -106,36 +97,11 @@ public class PersonCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code company_id} value.
-     */
-    public long getCompanyId() {
-        return getLongOrNull(TeamColumns.COMPANY_ID);
-    }
-
-    /**
-     * Get the {@code team_name} value.
+     * Get the {@code country_code} value.
      * Cannot be {@code null}.
      */
-    public String getTeamName() {
-        Integer index = getCachedColumnIndexOrThrow(TeamColumns.TEAM_NAME);
-        return getString(index);
-    }
-
-    /**
-     * Get the {@code company_name} value.
-     * Cannot be {@code null}.
-     */
-    public String getCompanyName() {
-        Integer index = getCachedColumnIndexOrThrow(CompanyColumns.COMPANY_NAME);
-        return getString(index);
-    }
-
-    /**
-     * Get the {@code address} value.
-     * Can be {@code null}.
-     */
-    public String getAddress() {
-        Integer index = getCachedColumnIndexOrThrow(CompanyColumns.ADDRESS);
+    public String getCountryCode() {
+        Integer index = getCachedColumnIndexOrThrow(PersonColumns.COUNTRY_CODE);
         return getString(index);
     }
 }

@@ -9,7 +9,7 @@ import android.database.Cursor;
 
 import ${config.providerJavaPackage}.base.AbstractCursor;
 <#list entity.joinedEntities as joinedEntity>
-import ${config.providerJavaPackage}.${joinedEntity.nameLowerCase}.*;
+import ${config.providerJavaPackage}.${joinedEntity.packageName}.*;
 </#list>
 
 /**
@@ -19,11 +19,15 @@ public class ${entity.nameCamelCase}Cursor extends AbstractCursor {
     public ${entity.nameCamelCase}Cursor(Cursor cursor) {
         super(cursor);
     }
-    <#list entity.fieldsIncludingJoins as field>
+    <#list entity.getFieldsIncludingJoins() as field>
         <#if !field.isId>
 
     /**
+    <#if field.documentation??>
+     * ${field.documentation}
+    <#else>
      * Get the {@code ${field.nameLowerCase}} value.
+    </#if>
         <#if field.isNullable>
      * Can be {@code null}.
         <#else>
@@ -32,7 +36,7 @@ public class ${entity.nameCamelCase}Cursor extends AbstractCursor {
             </#if>
         </#if>
      */
-    public ${field.javaTypeSimpleName} get${field.nameCamelCase}() {
+    public ${field.javaTypeSimpleName} get<#if field.isForeign>${field.path}</#if>${field.nameCamelCase}() {
             <#switch field.type.name()>
             <#case "STRING">
         Integer index = getCachedColumnIndexOrThrow(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});

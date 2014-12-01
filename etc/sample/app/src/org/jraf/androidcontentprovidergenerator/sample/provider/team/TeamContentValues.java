@@ -57,9 +57,30 @@ public class TeamContentValues extends AbstractContentValues {
 
 
 
-    public TeamContentValues putTeamName(String value) {
-        if (value == null) throw new IllegalArgumentException("value for teamName must not be null");
-        mContentValues.put(TeamColumns.TEAM_NAME, value);
+    public TeamContentValues putName(String value) {
+        if (value == null) throw new IllegalArgumentException("value for name must not be null");
+        mContentValues.put(TeamColumns.NAME, value);
+        return this;
+    }
+
+
+
+    /**
+     * 2 letter country code where this team operates.
+     */
+    public TeamContentValues putCountryCode(String value) {
+        if (value == null) throw new IllegalArgumentException("value for countryCode must not be null");
+        mContentValues.put(TeamColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+
+
+    /**
+     * The serial number of this team.
+     */
+    public TeamContentValues putSerialNumberId(long value) {
+        mContentValues.put(TeamColumns.SERIAL_NUMBER_ID, value);
         return this;
     }
 
